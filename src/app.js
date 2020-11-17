@@ -28,8 +28,10 @@ app.use(bodyParser.json())
 
 
 
-app.get('/', (req, res) => {
-	res.send(database.users)
+app.get('/users', (req, res) => {
+	db.select('email').from('users').then((users) => {
+        res.send(users)
+    })
 })
 
 app.get('/todo/:id', (req,res) => {
