@@ -34,6 +34,7 @@ app.get('/users', (req, res) => {
     })
 })
 
+
 app.get('/todo/:id', (req,res) => {
     const {id} =  req.params
     db('todo').where({
@@ -108,6 +109,22 @@ app.post('/register',(req,res) => {
    
 })
 
+app.put('/update/:id', (req,res) => {
+    const {password} = req.body
+    const {id} = req.params
+    const hash = bcrypt.hashSync(password)
+    db('login').where ('id', id)
+                    .returning('*')
+                    .update({
+                        hash: hash
+                    })
+                    .then (response => {
+                        db.select().from('login').where('id',id).then( function(id){
+                            res.send(id)
+                        })
+                    })
+})
+
 app.put('/todo/:id', (req,res) => {
     const {todo} = req.body
     const {id} = req.params
@@ -122,6 +139,8 @@ app.put('/todo/:id', (req,res) => {
                 })
                 })
 })
+
+
 
 app.put('/toggle/:id', (req,res) => {
     const {done} =  req.body
@@ -154,26 +173,6 @@ app.post('/add/:id',  (req,res) => {
             const json = JSON.parse(JSON.stringify(response))
             res.json({"noteid": json[0].noteid});
         })
-
-
-
-
-    /* db('todo').insert({
-        todo: todo,
-        id: id
-    })
-    .then(() => {
-        db.select().from('todo')
-            .then (todo => {
-                res.send(todo)
-            }) 
-    }) 
-    .returning('noteid')
-    .then(
-        function (id){
-            console.log(id[0]);  //id here
-        }
-    ) */
     
 })
 
