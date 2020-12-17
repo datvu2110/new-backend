@@ -27,6 +27,9 @@ app.use(cors())
 app.use(bodyParser.json())
 
 
+app.get('/', (req, res) => {
+	res.send("Hello World")
+})
 
 app.get('/users', (req, res) => {
 	db.select('email').from('users').then((users) => {
