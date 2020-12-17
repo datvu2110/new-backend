@@ -12,11 +12,3 @@ describe('App', ()=>{
     })
 })
 
-describe('App', ()=>{
-    it('Test users', ()=> {
-        sinon.stub(knex, "from").callsFake( (any) => {return {"email" : "email@email.com"}; })
-        return supertest(app)
-           .get('/users')
-           .expect(200, 'Hello World')
-    })
-})
