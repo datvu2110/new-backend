@@ -156,7 +156,8 @@ app.put('/toggle/:id', (req,res) => {
                     })
                     .then (response => {
                         db.select().from('todo').where('noteid',id).then( function(todo){
-                            res.send(todo)
+                            res.send("Toggle Successfully")
+                            
                         })
                     })
 })
