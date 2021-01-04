@@ -175,27 +175,28 @@ app.post('/add/:id',  (req,res) => {
         })
         .then(response => {
             const json = JSON.parse(JSON.stringify(response))
-            res.json({"noteid": json[0].noteid});
+            res.json("new todo added")
+            // res.json({"noteid": json[0].noteid});
         })
     
 })
 
-app.get('/profile/:id',(req,res) =>{
-    const {id} = req.params
-    db.select('*').from('users')
-    .where({
-        id: id
-    })
-    .then(user => {
-        if (user.length){
-            res.json(user[0])
-        }else{
-            res.status(400).json('Not Found')
-        }
-    })
-    .catch(err => res.status(400).json('Error getting user'))
+// app.get('/profile/:id',(req,res) =>{
+//     const {id} = req.params
+//     db.select('*').from('users')
+//     .where({
+//         id: id
+//     })
+//     .then(user => {
+//         if (user.length){
+//             res.json(user[0])
+//         }else{
+//             res.status(400).json('Not Found')
+//         }
+//     })
+//     .catch(err => res.status(400).json('Error getting user'))
     
-})
+// })
 
 
 app.use(function errorHandler(error, req, res, next) {
