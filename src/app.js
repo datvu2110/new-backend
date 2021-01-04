@@ -182,6 +182,7 @@ app.post('/add/:id',  (req,res) => {
             const json = JSON.parse(JSON.stringify(response))
             //res.send("new todo added")
             res.json({"noteid": json[0].noteid});
+            res.send("new todo added")
         })
     
 })
