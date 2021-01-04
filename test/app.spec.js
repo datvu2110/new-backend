@@ -47,7 +47,7 @@ describe('App', ()=>{
     })
 
     it('POST /signin if the user signs in successfully' , () => {
-        let data = {email: "a@gmail.com" , password: "a"}
+        let data = {email: "a@gmail.com" , password: "hello"}
         return supertest(app)
             .post('/signin')
             .send(data)
@@ -79,5 +79,28 @@ describe('App', ()=>{
             .expect(200,'"new todo added"')
     })
     
+    it('POST /register create new user' , () => {
+        let data = {
+            "name": "Aloha",
+            "email": "sdfsdfwf242324232412@gmail.com",
+            "password" : "hello"
+        }
+        return supertest(app)
+            .post('/register')
+            .send(data)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200,'"New user is created"')
+    })
+
+    it('PUT /toggle/:id toggle the todo item' , () => {
+        let data = { "password" : "hello" }
+        return supertest(app)
+            .put('/update/2')
+            .send(data)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /html/)
+            .expect(200,'Password is updated')
+    })
 })
 
