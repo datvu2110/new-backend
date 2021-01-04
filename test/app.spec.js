@@ -68,7 +68,20 @@ describe('App', ()=>{
             .send(data)
             .set('Accept', 'application/json')
             .expect('Content-Type', /html/)
-            .expect(200,'Toggle successfully')
+            .expect(200,'Toggle Successfully')
+    })
+
+    it('POST /todo/:id add new todo' , () => {
+        let data = {
+            "todo": "hello another one",
+            "id" : "13"
+        }
+        return supertest(app)
+            .post('/add/13')
+            .send(data)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200,'new todo added')
     })
 
 })

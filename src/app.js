@@ -175,7 +175,7 @@ app.post('/add/:id',  (req,res) => {
         })
         .then(response => {
             const json = JSON.parse(JSON.stringify(response))
-            res.json("new todo added")
+            res.send("new todo added")
             // res.json({"noteid": json[0].noteid});
         })
     
