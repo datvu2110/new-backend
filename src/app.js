@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 })
 
 
-
+// Get all todos for users with an ID 
 app.get('/todo/:id', (req,res) => {
     const {id} =  req.params
     db('todo').where({
@@ -45,6 +45,7 @@ app.get('/todo/:id', (req,res) => {
     })
 })
 
+//Delete a todo with the todo ID
 app.delete('/todo/:id', (req, res) => {
     const {id} = req.params
     db('todo').where('noteid', id)
@@ -58,6 +59,7 @@ app.delete('/todo/:id', (req, res) => {
         })
 })
 
+//Check the username and password
 app.post('/signin', (req,res) => {
     db.select('email','hash').from('login')
         .where('email', '=', req.body.email)
@@ -81,6 +83,7 @@ app.post('/signin', (req,res) => {
     .catch(err => res.status(400).json('Wrong Credential'))
 })
 
+// Register an user
 app.post('/register',(req,res) => {
     const {email, name, password} = req.body
     const hash = bcrypt.hashSync(password)
@@ -110,6 +113,7 @@ app.post('/register',(req,res) => {
    
 })
 
+// Update the password with the user ID
 app.put('/update/:id', (req,res) => {
     const {password} = req.body
     const {id} = req.params
@@ -126,6 +130,7 @@ app.put('/update/:id', (req,res) => {
                     })
 })
 
+// Update the todo with the todo ID
 app.put('/todo/:id', (req,res) => {
     const {todo} = req.body
     const {id} = req.params
@@ -160,6 +165,8 @@ app.put('/toggle/:id', (req,res) => {
                     })
 })
 
+
+// Add a new todo
 app.post('/add/:id',  (req,res) => {
     
     const {todo} = req.body
@@ -178,24 +185,6 @@ app.post('/add/:id',  (req,res) => {
         })
     
 })
-
-// app.get('/profile/:id',(req,res) =>{
-//     const {id} = req.params
-//     db.select('*').from('users')
-//     .where({
-//         id: id
-//     })
-//     .then(user => {
-//         if (user.length){
-//             res.json(user[0])
-//         }else{
-//             res.status(400).json('Not Found')
-//         }
-//     })
-//     .catch(err => res.status(400).json('Error getting user'))
-    
-// })
-
 
 app.use(function errorHandler(error, req, res, next) {
     let response
