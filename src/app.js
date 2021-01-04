@@ -101,7 +101,8 @@ app.post('/register',(req,res) => {
                 email:loginEmail[0],
                 name:name
             }).then(user => {
-                res.json(user[0])
+                //res.json(user[0])
+                res.json("New user is created")
             }).catch(error => {
                 res.send('unable to register')
             })
@@ -125,7 +126,8 @@ app.put('/update/:id', (req,res) => {
                     })
                     .then (response => {
                         db.select().from('login').where('id',id).then( function(id){
-                            res.send(id)
+                            //res.send("id")
+                            res.send("Password is updated")
                         })
                     })
 })

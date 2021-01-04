@@ -75,8 +75,8 @@ describe('App', ()=>{
             .post('/add/13')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /html/)
-            .expect(200,'new todo added')
+            .expect('Content-Type', /json/)
+            .expect(200,'"new todo added"')
     })
     
 })
