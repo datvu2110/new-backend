@@ -27,12 +27,7 @@ describe('App', ()=>{
            .expect(200, 'Hello World')
     })
 
-    it('GET /users get all users', ()=> {
-        return supertest(app)
-           .get('/users')
-           .expect(200)
-    })
-
+  
     it('GET todo with for user with ID 2', ()=> {
         return supertest(app)
            .get('/todo/2')
@@ -80,9 +75,9 @@ describe('App', ()=>{
             .post('/add/13')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
+            .expect('Content-Type', /html/)
             .expect(200,'new todo added')
     })
-
+    
 })
 
