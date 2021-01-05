@@ -82,7 +82,7 @@ describe('App', ()=>{
     it('POST /register create new user' , () => {
         let data = {
             "name": "Aloha",
-            "email": "sdfsdfwf242324232412@gmail.com",
+            "email": "sdfsdfwf24232423241212@gmail.com",
             "password" : "hello"
         }
         return supertest(app)
@@ -93,7 +93,7 @@ describe('App', ()=>{
             .expect(200,'"New user is created"')
     })
 
-    it('PUT /toggle/:id toggle the todo item' , () => {
+    it('PUT /update the password' , () => {
         let data = { "password" : "hello" }
         return supertest(app)
             .put('/update/2')
