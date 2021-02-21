@@ -82,7 +82,7 @@ describe('App', ()=>{
     it('POST /register create new user' , () => {
         let data = {
             "name": "Aloha",
-            "email": "sdfsdfwf24232423241212@gmail.com",
+            "email": "sdfsdfwf242324232412121111@gmail.com",
             "password" : "hello"
         }
         return supertest(app)
@@ -101,6 +101,15 @@ describe('App', ()=>{
             .set('Accept', 'application/json')
             .expect('Content-Type', /html/)
             .expect(200,'Password is updated')
+    })
+
+    it('DELETE /delete the todo' , () => {
+        
+        return supertest(app)
+            .delete('/delete/20')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /html/)
+            .expect(404)
     })
 })
 
