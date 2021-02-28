@@ -73,14 +73,14 @@ app.post('/signin', (req,res) => {
                     .then(user => {
                         res.json(user[0])
                     })
-                    .catch(err => res.status(400).send('User not Found'))
+                    .catch(err => console.log("User Not Found"))
                 
             }else{
-                res.status(400).send('Wrong Credential')
+                console.log('Wrong Credential')
             }
             
         })
-    .catch(err => res.status(400).send('Wrong Credential'))
+    .catch(err => console.log('Wrong Credential'))
 })
 
 // Register an user
