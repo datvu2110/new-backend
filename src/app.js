@@ -73,16 +73,16 @@ app.post('/signin', (req,res) => {
                     .then(user => {
                         res.json(user[0])
                     })
-                    .catch(err => res.status(400).json('User not Found'))
+                    .catch(err => res.status(200).json('User not Found'))
                 
             }else{
-                res.status(400).json({
+                res.status(200).json({
                     message: 'Wrong Credential'
                 })
             }
             
         })
-    .catch(err => res.status(400).json({
+    .catch(err => res.status(200).json({
         message: 'Wrong Credential'
     }))
 })
