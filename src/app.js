@@ -118,18 +118,18 @@ app.post('/register',(req,res) => {
 })
 
 // Update the password with the user ID
-app.put('/update/:id', (req,res) => {
+app.put('/update/:email', (req,res) => {
     const {password} = req.body
-    const {id} = req.params
+    const {email} = req.params
     const hash = bcrypt.hashSync(password)
-    db('login').where ('id', id)
+    db('login').where ('email', email)
                     .returning('*')
                     .update({
                         hash: hash
                     })
                     .then (response => {
-                        db.select().from('login').where('id',id).then( function(id){
-                            res.send(id)
+                        db.select().from('login').where('email',email).then( function(data){
+                            res.send(data)
                         
                         })
                     })
