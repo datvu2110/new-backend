@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config')
 const knex = require('knex')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt-nodejs')
-const register = require('./controllers/register')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -88,7 +87,35 @@ app.post('/signin', (req,res) => {
 })
 
 // Register an user
-app.post('/register',(req, res) => { register.handleRegister(req, res, db, bcrypt) })
+app.post('/register',(req,res) => {
+    const {email, name, password} = req.body
+    const hash = bcrypt.hashSync(password)
+    db.transaction(trx => {
+        trx.insert({
+            hash: hash,
+            email: email
+        })
+        .into('login')
+        .returning('email')
+        .then(loginEmail => {
+            return trx('users')
+            .returning('*')
+            .insert({
+                email:loginEmail[0],
+                name:name
+            }).then(user => {
+                //res.json(user[0])
+                res.json("New user is created")
+            }).catch(error => {
+                res.send('unable to register')
+            })
+        })
+        .then(trx.commit)
+        .catch(trx.rollback)
+    })
+    .catch(err => console.log(err))
+   
+})
 
 // Update the password with the user ID
 app.put('/update/:id', (req,res) => {
