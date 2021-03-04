@@ -104,8 +104,8 @@ app.post('/register',(req,res) => {
                 email:loginEmail[0],
                 name:name
             }).then(user => {
-                //res.json(user[0])
-                res.json("New user is created")
+                res.json(user[0])
+                
             }).catch(error => {
                 res.send('unable to register')
             })
