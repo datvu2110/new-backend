@@ -129,8 +129,8 @@ app.put('/update/:id', (req,res) => {
                     })
                     .then (response => {
                         db.select().from('login').where('id',id).then( function(id){
-                            //res.send("id")
-                            res.send("Password is updated")
+                            res.send(id)
+                        
                         })
                     })
 })
