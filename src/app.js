@@ -13,6 +13,7 @@ const gettodo = require('./controllers/get-todo')
 const deleteTodo =require('./controllers/delete')
 const updatePassword = require('./controllers/updatepassword')
 const toggleTodo = require('./controllers/toggletodo')
+const updateTodo = require('./controllers/updatetodo')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -51,42 +52,14 @@ app.post('/signin', (req,res) => {signin.handleSignin(req,res,db,bcrypt)})
 app.post('/register',(req,res) => {register.handleRegister(req,res,db,bcrypt)})
 
 // Update the password with the user ID
-app.put('/update/:email', (req,res) => {updatePassword.updatepassword(req,res,db,b)})
+app.put('/update/:email', (req,res) => {updatePassword.updatepassword(req,res,db,bcrypt)})
 
 // Update the todo with the todo ID
-app.put('/todo/:id', (req,res) => {
-    const {todo} = req.body
-    const {id} = req.params
-    db('todo').where ('noteid', id)
-              .returning('*')
-              .update({
-                  todo:todo
-              })
-              .then(response => {
-                db.select().from('todo').where('noteid',id).then( function(todo){
-                    res.send(todo)
-                })
-                })
-})
+app.put('/todo/:id', (req,res) => {updateTodo.updatetodo(req,res,db)})
 
 
 
-app.put('/toggle/:id', (req,res) => {
-    const {done} =  req.body
-    const {id} = req.params
-
-    db('todo').where ('noteid', id)
-                    .returning('*')
-                    .update({
-                        done: done
-                    })
-                    .then (response => {
-                        db.select().from('todo').where('noteid',id).then( function(todo){
-                            res.send(todo)
-                            
-                        })
-                    })
-})
+app.put('/toggle/:id', (req,res) => {toggleTodo.toggletodo(req,res,db)})
 
 
 // Add a new todo

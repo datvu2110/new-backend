@@ -1,4 +1,4 @@
-const toggletodo = (req,res) => {
+const toggletodo = (req,res,db) => {
     const {done} =  req.body
     const {id} = req.params
 
