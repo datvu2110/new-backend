@@ -63,7 +63,7 @@ app.put('/toggle/:id', (req,res) => {toggletodo.toggletodo(req,res,db)} )
 
 
 // Add a new todo
-app.post('/todo/:id', (req,res) => {addtodo.addtodo(req,res,db)})
+app.post('/add/:id', (req,res) => {addtodo.addtodo(req,res,db)})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
