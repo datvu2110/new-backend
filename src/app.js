@@ -8,6 +8,13 @@ const knex = require('knex')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt-nodejs')
 const register = require('./controllers/register')
+const signin  = require('./controllers/signin')
+const gettodo = require('./controllers/gettodo')
+const deletetodo = require('./controllers/deletetodo')
+const updatepassword = require('./controllers/updatepassword')
+const updatetodo = require('./controllers/updatetodo')
+const toggletodo = require('./controllers/toggletodo')
+const addtodo = require('./controllers/addtodo')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -34,135 +41,29 @@ app.get('/', (req, res) => {
 
 
 // Get all todos for users with an ID 
-app.get('/todo/:id', (req,res) => {
-    const {id} =  req.params
-    db('todo').where({
-        id: id
-    }).select('todo','noteid', 'id',"done")
-
-    .then(item => {
-        res.json(item)
-    })
-})
+app.get('/todo/:id', (res,req) => {gettodo.gettodo(req,res,db)})
 
 //Delete a todo with the todo ID
-app.delete('/todo/:id', (req, res) => {
-    const {id} = req.params
-    db('todo').where('noteid', id)
-        .del()
-        .then( () => {
-            db.select()
-                .from ('todo')
-                .then( (todo) =>{
-                    res.send(todo)
-                })
-        })
-})
+app.delete('/todo/:id', (req,res) => {deletetodo.deletetodo(req,res,db)})
 
 //Check the username and password
-app.post('/signin', (req,res) => {
-    db.select('email','hash').from('login')
-        .where('email', '=', req.body.email)
-        .then(data => {
-            const isValid = bcrypt.compareSync(req.body.password, data[0].hash)
-            console.log(isValid)
-            if (isValid){
-            
-                return   db.select('*').from('users')
-                    .where('email', '=',req.body.email)
-                    .then(user => {
-                        res.json(user[0])
-                    })
-                    .catch(err => res.status(200).json('User not Found'))
-                
-            }else{
-                res.status(200).json({
-                    message: 'Wrong Credential'
-                })
-            }
-            
-        })
-    .catch(err => res.status(200).json({
-        message: 'Wrong Credential'
-    }))
-})
+app.post('/signin', (req,res) => {signin.handleSignin(req,res,db,bcrypt)})
 
 // Register an user
 app.post('/register',(req,res) => {register.handleRegister(req,res,db,bcrypt)})
 
 // Update the password with the user ID
-app.put('/update/:email', (req,res) => {
-    const {password} = req.body
-    const {email} = req.params
-    const hash = bcrypt.hashSync(password)
-    db('login').where ('email', email)
-                    .returning('*')
-                    .update({
-                        hash: hash
-                    })
-                    .then (response => {
-                        db.select().from('login').where('email',email).then( function(data){
-                            res.send(data)
-                        
-                        })
-                    })
-})
+app.put('/update/:email', (req,res) => {updatepassword.updatepassword(req,res,db,bcrypt)})
 
 // Update the todo with the todo ID
-app.put('/todo/:id', (req,res) => {
-    const {todo} = req.body
-    const {id} = req.params
-    db('todo').where ('noteid', id)
-              .returning('*')
-              .update({
-                  todo:todo
-              })
-              .then(response => {
-                db.select().from('todo').where('noteid',id).then( function(todo){
-                    res.send(todo)
-                })
-                })
-})
+app.put('/todo/:id', (req,res) => {updatetodo.updatetodo(req,res,db)})
 
 
-
-app.put('/toggle/:id', (req,res) => {
-    const {done} =  req.body
-    const {id} = req.params
-
-    db('todo').where ('noteid', id)
-                    .returning('*')
-                    .update({
-                        done: done
-                    })
-                    .then (response => {
-                        db.select().from('todo').where('noteid',id).then( function(todo){
-                            res.send(todo)
-                            
-                        })
-                    })
-})
+app.put('/toggle/:id', (req,res) => {toggletodo.toggletodo(req,res,db)} )
 
 
 // Add a new todo
-app.post('/add/:id',  (req,res) => {
-    
-    const {todo} = req.body
-    const {id} = req.params
-
-    db('todo')
-        .returning('*')
-        .insert({
-            todo:todo,
-            id:id
-        })
-        .then(response => {
-            const json = JSON.parse(JSON.stringify(response))
-            res.json({"noteid": json[0].noteid});
-            //res.json("new todo added")
-        })
-    
-})
+app.post('/todo/:id', (req,res) => {addtodo.addtodo(req,res,db)})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
