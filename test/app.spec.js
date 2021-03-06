@@ -62,27 +62,29 @@ describe('App', ()=>{
             .put('/toggle/41')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /html/)
-            .expect(200,'Toggle Successfully')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200,[])
     })
 
     it('POST /todo/:id add new todo' , () => {
+     
+      
         let data = {
             "todo": "hello another one",
             "id" : "13"
         }
         return supertest(app)
-            .post('/add/13')
+            .post('/todo/13')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(200,'"new todo added"')
+            .expect('Content-Type', "application/json; charset=utf-8")
+            .expect(200)
     })
     
     it('POST /register create new user' , () => {
         let data = {
             "name": "Aloha",
-            "email": "sdfsdfwf242324232412121111@gmail.com",
+            "email": "sdfsdfwf24232423241212111123@gmail.com",
             "password" : "hello"
         }
         return supertest(app)
@@ -90,7 +92,7 @@ describe('App', ()=>{
             .send(data)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(200,'"New user is created"')
+            .expect(400)
     })
 
     it('PUT /update the password' , () => {
@@ -99,8 +101,8 @@ describe('App', ()=>{
             .put('/update/2')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /html/)
-            .expect(200,'Password is updated')
+            .expect('Content-Type',"application/json; charset=utf-8")
+            .expect([])
     })
 
     it('DELETE /delete the todo' , () => {
