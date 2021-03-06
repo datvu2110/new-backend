@@ -71,7 +71,22 @@ app.put('/todo/:id', (req,res) => {
 
 
 
-app.put('/toggle/:id', (req,res) =>{toggleTodo.toggletodo(req,res,db)})
+app.put('/toggle/:id', (req,res) => {
+    const {done} =  req.body
+    const {id} = req.params
+
+    db('todo').where ('noteid', id)
+                    .returning('*')
+                    .update({
+                        done: done
+                    })
+                    .then (response => {
+                        db.select().from('todo').where('noteid',id).then( function(todo){
+                            res.send(todo)
+                            
+                        })
+                    })
+})
 
 
 // Add a new todo
