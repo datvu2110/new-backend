@@ -12,6 +12,7 @@ const signin  = require('./controllers/signin')
 const gettodo = require('./controllers/get-todo')
 const deleteTodo =require('./controllers/delete')
 const updatePassword = require('./controllers/updatepassword')
+const updateTodo = require('./controllers/updatetodo')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -53,20 +54,7 @@ app.post('/register',(req,res) => {register.handleRegister(req,res,db,bcrypt)})
 app.put('/update/:email', (req,res) => {updatePassword.updatepassword(req,res,db,bcrypt)})
 
 // Update the todo with the todo ID
-app.put('/todo/:id', (req,res) => {
-    const {todo} = req.body
-    const {id} = req.params
-    db('todo').where ('noteid', id)
-              .returning('*')
-              .update({
-                  todo:todo
-              })
-              .then(response => {
-                db.select().from('todo').where('noteid',id).then( function(todo){
-                    res.send(todo)
-                })
-                })
-})
+app.put('/todo/:id', (req,res) => {updateTodo.updatetodo(req,res,db)})
 
 
 
