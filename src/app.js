@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt-nodejs')
 const register = require('./controllers/register')
 const signin  = require('./controllers/signin')
 const gettodo = require('./controllers/get-todo')
-
+const deleteTodo =require('./controllers/delete')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -40,18 +40,7 @@ app.get('/', (req, res) => {
 app.get('/todo/:id', (req,res) => {gettodo.gettodo(req,res,db)})
 
 //Delete a todo with the todo ID
-app.delete('/todo/:id', (req, res) => {
-    const {id} = req.params
-    db('todo').where('noteid', id)
-        .del()
-        .then( () => {
-            db.select()
-                .from ('todo')
-                .then( (todo) =>{
-                    res.send(todo)
-                })
-        })
-})
+app.delete('/todo/:id', (req, res) => {deleteTodo.deletetodo(req,res,db)})
 
 //Check the username and password
 app.post('/signin', (req,res) => {signin.handleSignin(req,res,db,bcrypt)})
