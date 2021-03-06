@@ -10,11 +10,7 @@ const bcrypt = require('bcrypt-nodejs')
 const register = require('./controllers/register')
 const signin  = require('./controllers/signin')
 const gettodo = require('./controllers/get-todo')
-const deleteTodo = require('./controllers/delete')
-const updatePassword = require('./controllers/updatepassword')
-const updateTodo = require('./controllers/updatetodo')
-const toggleTodo = require('./controllers/toggletodo')
-const addTodo = require('./controllers/addtodo')
+
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -44,7 +40,18 @@ app.get('/', (req, res) => {
 app.get('/todo/:id', (req,res) => {gettodo.gettodo(req,res,db)})
 
 //Delete a todo with the todo ID
-app.delete('/todo/:id', (req, res) => {deleteTodo.deletetodo(req,res,db)})
+app.delete('/todo/:id', (req, res) => {
+    const {id} = req.params
+    db('todo').where('noteid', id)
+        .del()
+        .then( () => {
+            db.select()
+                .from ('todo')
+                .then( (todo) =>{
+                    res.send(todo)
+                })
+        })
+})
 
 //Check the username and password
 app.post('/signin', (req,res) => {signin.handleSignin(req,res,db,bcrypt)})
@@ -53,17 +60,78 @@ app.post('/signin', (req,res) => {signin.handleSignin(req,res,db,bcrypt)})
 app.post('/register',(req,res) => {register.handleRegister(req,res,db,bcrypt)})
 
 // Update the password with the user ID
-app.put('/update/:email', (req,res) => {updatePassword.updatepassword(req,res,db,bcrypt)})
+app.put('/update/:email', (req,res) => {
+    const {password} = req.body
+    const {email} = req.params
+    const hash = bcrypt.hashSync(password)
+    db('login').where ('email', email)
+                    .returning('*')
+                    .update({
+                        hash: hash
+                    })
+                    .then (response => {
+                        db.select().from('login').where('email',email).then( function(data){
+                            res.send(data)
+                        
+                        })
+                    })
+})
 
 // Update the todo with the todo ID
-app.put('/todo/:id', (req,res) => {updateTodo.updatetodo(req,res,db)})
+app.put('/todo/:id', (req,res) => {
+    const {todo} = req.body
+    const {id} = req.params
+    db('todo').where ('noteid', id)
+              .returning('*')
+              .update({
+                  todo:todo
+              })
+              .then(response => {
+                db.select().from('todo').where('noteid',id).then( function(todo){
+                    res.send(todo)
+                })
+                })
+})
 
 
-app.put('/toggle/:id', (req,res) => {toggleTodo.toggletodo(req,res,db)})
+
+app.put('/toggle/:id', (req,res) => {
+    const {done} =  req.body
+    const {id} = req.params
+
+    db('todo').where ('noteid', id)
+                    .returning('*')
+                    .update({
+                        done: done
+                    })
+                    .then (response => {
+                        db.select().from('todo').where('noteid',id).then( function(todo){
+                            res.send(todo)
+                            
+                        })
+                    })
+})
 
 
 // Add a new todo
-app.post('/add/:id',  (req,res) => {addTodo.addtodo(req,res,db)})
+app.post('/add/:id',  (req,res) => {
+    
+    const {todo} = req.body
+    const {id} = req.params
+
+    db('todo')
+        .returning('*')
+        .insert({
+            todo:todo,
+            id:id
+        })
+        .then(response => {
+            const json = JSON.parse(JSON.stringify(response))
+            res.json({"noteid": json[0].noteid});
+            //res.json("new todo added")
+        })
+    
+})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
