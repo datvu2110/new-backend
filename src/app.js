@@ -58,10 +58,12 @@ app.put('/update/:email', (req,res) => {updatePassword.updatepassword(req,res,db
 // Update the todo with the todo ID
 app.put('/todo/:id', (req,res) => {updateTodo.updatetodo(req,res,db)})
 
+
 app.put('/toggle/:id', (req,res) => {toggleTodo.toggletodo(req,res,db)})
 
+
 // Add a new todo
-app.post('/todo/:id',  (req,res) => {addTodo.addtodo(req,res,db)})
+app.post('/add/:id',  (req,res) => {addTodo.addtodo(req,res,db)})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
