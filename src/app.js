@@ -12,6 +12,7 @@ const signin  = require('./controllers/signin')
 const gettodo = require('./controllers/get-todo')
 const deleteTodo =require('./controllers/delete')
 const updatePassword = require('./controllers/updatepassword')
+const toggleTodo = require('./controllers/toggletodo')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -70,22 +71,7 @@ app.put('/todo/:id', (req,res) => {
 
 
 
-app.put('/toggle/:id', (req,res) => {
-    const {done} =  req.body
-    const {id} = req.params
-
-    db('todo').where ('noteid', id)
-                    .returning('*')
-                    .update({
-                        done: done
-                    })
-                    .then (response => {
-                        db.select().from('todo').where('noteid',id).then( function(todo){
-                            res.send(todo)
-                            
-                        })
-                    })
-})
+app.put('/toggle/:id', (req,res) =>{toggleTodo.toggletodo(req,res,db)})
 
 
 // Add a new todo
