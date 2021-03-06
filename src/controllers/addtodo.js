@@ -1,4 +1,4 @@
-const addtodo = (req,res) => {
+const addtodo = (req,res,db) => {
     
     const {todo} = req.body
     const {id} = req.params

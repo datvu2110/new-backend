@@ -14,6 +14,7 @@ const deleteTodo =require('./controllers/delete')
 const updatePassword = require('./controllers/updatepassword')
 const toggleTodo = require('./controllers/toggletodo')
 const updateTodo = require('./controllers/updatetodo')
+const addTodo = require('./controllers/addtodo')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
@@ -63,24 +64,7 @@ app.put('/toggle/:id', (req,res) => {toggleTodo.toggletodo(req,res,db)})
 
 
 // Add a new todo
-app.post('/add/:id',  (req,res) => {
-    
-    const {todo} = req.body
-    const {id} = req.params
-
-    db('todo')
-        .returning('*')
-        .insert({
-            todo:todo,
-            id:id
-        })
-        .then(response => {
-            const json = JSON.parse(JSON.stringify(response))
-            res.json({"noteid": json[0].noteid});
-            //res.json("new todo added")
-        })
-    
-})
+app.post('/todo/:id',  (req,res) => {addTodo.addtodo(req,res,db)})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
