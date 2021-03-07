@@ -71,3 +71,6 @@ To get setup locally, do the following:
 		);
 
 4. In the app.js file, change the DB connection to localhost
+
+## API Documentation
+![Click Here for the API Documentation](https://drive.google.com/file/d/1vc9lz1YOn0GMLCWplezscfps0XHmsmA5/view?usp=sharing)
